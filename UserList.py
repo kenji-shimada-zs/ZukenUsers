@@ -1,6 +1,8 @@
 import pathlib,re
 log_file=pathlib.Path(__file__).parent.joinpath("debug.log")
-
+network_path=r'\\uranus\CR8000\part_temp.csv'
+path=pathlib.WindowsPath(network_path)
+print(path.exists())
 class Users():
     def __init__(self):
         self.UserList=[]

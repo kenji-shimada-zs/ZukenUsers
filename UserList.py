@@ -1,4 +1,4 @@
-import pathlib,re
+import pathlib,re,subprocess
 log_file=pathlib.Path(__file__).parent.joinpath("debug.log")
 network_path=r'\\uranus\CR8000\part_temp.csv'
 path=pathlib.WindowsPath(network_path)
@@ -26,6 +26,11 @@ def UserList(log:pathlib.Path):
                 Users_data.remove_user(match)
     return Users_data.UserList
 
+def get_user_info(user):
+    cmd=f'net user {user} /domain'
+    res=subprocess.run(cmd)
+    #参考:https://atmarkit.itmedia.co.jp/ait/articles/0609/02/news014.html
+    
 if __name__=="__main__":
     User_data=UserList(log_file)
     for i in User_data:

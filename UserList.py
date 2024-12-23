@@ -28,10 +28,18 @@ def UserList(log:pathlib.Path):
 
 def get_user_info(user):
     cmd=f'net user {user} /domain'
-    res=subprocess.run(cmd)
+    result=subprocess.run(cmd, capture_output=True, text=True)
     #参考:https://atmarkit.itmedia.co.jp/ait/articles/0609/02/news014.html
-    
+    result_line = result.stdout.splitlines()
+    for line in result_line:
+        list_a=re.split(' {2,}',line)
+        try:
+            if list_a[0] == 'フル ネーム':
+                return str(list_a[1]).replace('\u3000','')
+        except:
+            next
 if __name__=="__main__":
+    fullname=get_user_info("00090405348")
     User_data=UserList(log_file)
     for i in User_data:
         print(i,end="\n")

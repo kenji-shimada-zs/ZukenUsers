@@ -1,8 +1,7 @@
-import pathlib,re,subprocess
-log_file=pathlib.Path(__file__).parent.joinpath("debug.log")
-network_path=r'\\uranus\CR8000\part_temp.csv'
-path=pathlib.WindowsPath(network_path)
-print(path.exists())
+import pathlib,re,subprocess,pandas
+log_file=pathlib.WindowsPath(r'\\uranus\license\debug.log')
+if log_file.exists() == False:
+    raise FileExistsError(f"{log_file} is not found")
 class Users():
     def __init__(self):
         self.UserList=[]
@@ -18,6 +17,8 @@ def UserList(log:pathlib.Path):
     
     pattern=r'\d*:\d*:\d* \(zuken\) (?P<in_out>.*?): "(?P<kind>.*?)" (?P<user>.*?)@(?P<computer>.*?) '
     for line in log_lines:
+        if line == log_lines[-5]:
+            print()
         match=re.search(pattern,line)
         if match is not None:
             if   match.group("in_out") == "OUT":
@@ -39,7 +40,9 @@ def get_user_info(user):
         except:
             next
 if __name__=="__main__":
-    fullname=get_user_info("00090405348")
     User_data=UserList(log_file)
-    for i in User_data:
-        print(i,end="\n")
+    for i in range(len(User_data)):
+        User_data[i].append(get_user_info(User_data[i][1]))
+    User_data_df=pandas.DataFrame(data=User_data,columns=["kind","ID","PC-ID","FullName"])
+    print(User_data_df)
+    input("end")

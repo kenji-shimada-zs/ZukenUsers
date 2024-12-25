@@ -39,10 +39,15 @@ def get_user_info(user):
                 return str(list_a[1]).replace('\u3000','')
         except:
             next
-if __name__=="__main__":
+
+def get() -> pandas.DataFrame:
     User_data=UserList(log_file)
     for i in range(len(User_data)):
         User_data[i].append(get_user_info(User_data[i][1]))
     User_data_df=pandas.DataFrame(data=User_data,columns=["kind","ID","PC-ID","FullName"])
     print(User_data_df)
-    input("end")
+    return User_data_df 
+    
+if __name__=="__main__":
+    get()
+    input("finish")
